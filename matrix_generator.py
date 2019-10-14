@@ -1,7 +1,14 @@
 import os
 import pandas as pd
+import csv
 expression_data_path = r"C:/Users/aless/Documents/DataMiningLab/gdc_download_20191010_140437.280422"
 sample_sheet_path = r"C:/Users/aless/Documents/DataMiningLab/gdc_sample_sheet.2019-10-11.tsv"
+duplicates_ids = r"C:/Users/aless/Documents/DataMiningLab/duplicates_cases_id.txt"
+duplicates_dict = {}
+with open(duplicates_ids) as f:
+    for line in f:
+        line = line.strip("\n")
+        duplicates_dict[line] = 1
 matrix = pd.DataFrame()
 sample_no = 0
 file_to_barcode = dict()
@@ -20,11 +27,12 @@ for folder in os.listdir(expression_data_path):
 
         if file.endswith('.FPKM.txt'):
             barcode = file_to_barcode[file]
-            sample_expr = pd.read_csv(file_path, sep='\t')
-            if sample_no < 1:
-                matrix['Gene_ID'] = sample_expr.iloc[:, 0]
-                matrix[barcode] = sample_expr.iloc[:, 1]
-                sample_no = 1
-            else:
-                matrix[barcode] = sample_expr.iloc[:, 1]
-print(matrix)
+            if barcode[:-4] not in duplicates_dict:
+                sample_expr = pd.read_csv(file_path, sep='\t')
+                if sample_no < 1:
+                    matrix['Gene_ID'] = sample_expr.iloc[:, 0]
+                    matrix[barcode] = sample_expr.iloc[:, 1]
+                    sample_no = 1
+                else:
+                    matrix[barcode] = sample_expr.iloc[:, 1]
+matrix.to_csv(path_or_buf="/home/riccardo/Documents/data_mining_blanzieri/project/exprs_matrix.txt", sep="\t")
