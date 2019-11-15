@@ -4,8 +4,8 @@ from sklearn import manifold #''', decomposition'''
 import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
 
-which_matrix = 'raw_counts'
-norm_method = 'deseq2'
+which_matrix = 'fpkms'
+norm_method = 'log'
 metadata_table = r"C:/Users/aless/Documents/DataMiningLab/clinical.tsv"
 
 

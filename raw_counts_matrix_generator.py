@@ -35,3 +35,5 @@ for folder in os.listdir(expression_data_path):
 matrix = matrix.set_index('Gene_ID')
 print(matrix.shape)
 matrix.to_csv(r"C:/Users/aless/Documents/DataMiningLab/rawCountsExpressionMatrix.tsv", sep='\t')
+
+
