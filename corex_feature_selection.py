@@ -17,3 +17,4 @@ layer1 = ce.Corex(n_hidden=2, dim_hidden=1, marginal_description='gaussian', smo
                   n_repeat=REPS, n_cpu=N_CPU, ram=RAM).fit(expression_matrix)
 clusters = layer1.clusters
 
+
