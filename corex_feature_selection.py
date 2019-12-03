@@ -14,8 +14,8 @@ N_CPU = 100
 RAM = 200
 
 expression_matrix = pd.read_csv(expression_matrix_path, sep='\t', index_col=0, header=0)
-expression_matrix = mg.filter_by_variance(expression_matrix, final_number_of_features=100)
-print(expression_matrix.index.values)
+# expression_matrix = mg.filter_by_variance(expression_matrix, final_number_of_features=100)
+# print(expression_matrix.index.values)
 layer1 = ce.Corex(n_hidden=200, dim_hidden=3, marginal_description='gaussian', smooth_marginals=True,
                   n_repeat=REPS, n_cpu=N_CPU, ram=RAM).fit(expression_matrix)
 clusters = layer1.clusters
