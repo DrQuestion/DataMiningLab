@@ -14,7 +14,7 @@ def select_table(table, sets):
         subset table
     """
     
-    union_set = {}
+    union_set = set()
     for s in sets:
         union_set = union_set.union(s)
     return table[list(union_set)]

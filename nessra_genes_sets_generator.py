@@ -74,11 +74,11 @@ def setGen(exp_file, int_file, freq_tres, n_genes, tcode_symbol_dict):
 
 
 
-list_79 = [pd.read_csv('160679_Hs.expansion', sep = ",", header=1),
-            pd.read_csv('160679_Hs.interactions', sep = ",", header=1)]
-list_80 = [pd.read_csv('160680_Hs.expansion', sep = ",", header=1),
-            pd.read_csv('160680_Hs.interactions', sep = ",", header=1)]
-tcode_mat = pd.read_csv('hgnc_filtered_anno.csv', sep = ",", header=1)
+list_79 = [pd.read_csv('~/GoogleDrive/DataMining/Nessra/160679_Hs.expansion', sep = ",", header=1),
+            pd.read_csv('~/GoogleDrive/DataMining/Nessra/160679_Hs.interactions', sep = ",", header=1)]
+list_80 = [pd.read_csv('~/GoogleDrive/DataMining/Nessra/160680_Hs.expansion', sep = ",", header=1),
+            pd.read_csv('~/GoogleDrive/DataMining/Nessra/160680_Hs.interactions', sep = ",", header=1)]
+tcode_mat = pd.read_csv('~/GoogleDrive/DataMining/hgnc_filtered_anno.csv', sep = ",", header=1)
 
 # Set filter tresholds and max genes per set here!
 freq_treshold = 0.3
