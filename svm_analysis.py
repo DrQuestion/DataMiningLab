@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import model
 import nessra_genes_sets_generator as ng
+import mygene 
 
 
 #------------- MATRIX and CLASS VECTOR
@@ -47,23 +48,33 @@ print("")
 print("----SVM on NESSRA----")
 print("")
 # importing files output
-list_79 = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160679_Hs.expansion', sep = ",", header=1),
+list_apc = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160679_Hs.expansion', sep = ",", header=1),
             pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160679_Hs.interactions', sep = ",", header=1)]
-list_80 = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160680_Hs.expansion', sep = ",", header=1),
+list_smad4 = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160680_Hs.expansion', sep = ",", header=1),
             pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160680_Hs.interactions', sep = ",", header=1)]
+list_kras = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160812_Hs.expansion', sep = ",", header=1),
+            [None]]
+list_braf = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/147717_Hs.expansion', sep = ",", header=1),
+            [None]]
+
 # importing tcode conversion matrix
 tcode_mat = pd.read_csv('~/GoogleDrive/DataMiningLab/hgnc_filtered_anno.csv', sep = ",", header=0)
 
 # Set filter tresholds and max genes per set here!
-freq_treshold = 0.3
-n_genes_per_file = 40
+freq_treshold = 0.9
+n_genes_per_file = 450
 tcode_symbol_dict = ng.tcodeSymbolDictGen(tcode_mat)
-set79 = ng.setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=True)
-set80 = ng.setGen(list_80[0], list_80[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
-list_of_sets = [set79, set80]
+set_apc = ng.setGen(list_apc[0], list_apc[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=True)
+set_smad4 = ng.setGen(list_smad4[0], list_smad4[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
+set_kras = ng.setGen(list_kras[0], list_kras[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
+set_braf = ng.setGen(list_braf[0], list_braf[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
 
-print("Len of set file79: {}".format(len(set79)))
-print("Len of set file80: {}".format(len(set80)))
+list_of_sets = [set_apc, set_smad4, set_braf, set_braf ]
+
+print("Len of set apc: {}".format(len(set_apc)))
+print("Len of set smad4: {}".format(len(set_smad4)))
+print("Len of set kras: {}".format(len(set_kras)))
+print("Len of set braf: {}".format(len(set_braf)))
 print("Subsetting matrix with NESSRA output genes")
 ns_mat = model.select_table(matrix_t, list_of_sets)
 print("Transpose matrix filtered shape: {}".format(ns_mat.shape))
@@ -97,3 +108,17 @@ print("Precision:",metrics.precision_score(y_test, y_pred))
 
 # Model Recall: what percentage of positive tuples are labelled as such?
 print("Recall:",metrics.recall_score(y_test, y_pred))
+
+
+# Save genes as SYMBOL
+
+ens_gene_list = list(ns_mat.columns.values)
+mg = mygene.MyGeneInfo()
+symbol_genes = mg.querymany(ens_gene_list, scopes='ensembl.gene', fields='symbol', species='human')
+gene_list = []
+for el in symbol_genes:
+    if "symbol" in el:
+        gene_list.append(el["symbol"])
+print("len of ens genes: {}, len of symbol genes: {}".format(len(ens_gene_list), len(gene_list)))
+print(', '.join(gene_list))
+
