@@ -39,7 +39,7 @@ class_vector = class_vector[fil_for_class]
 print("Objective shape after filter for matrix samples: {}".format(class_vector.shape))
 
 # Final vector for classifying
-train = class_vector.iloc[:, -1].tolist()
+train = class_vector.iloc[:, -1].values
 print("Final vector for classiftibg is a {}, first elements: {}".format(type(train), train[:5]))
 print("")
 
@@ -87,6 +87,8 @@ from sklearn import metrics
 print("")
 print("--- Evaluating test set ---")
 print("Test matrix shape: {} \n{} \netc. \nTest class vector: {} \n{}, etc.\n".format(X_test.shape, X_test.head(2), len(y_test), y_test[:20]))
+print("Frequency filter used in NESSRA output: {}, final number of genes: {}". format(freq_treshold, X_test.shape[1]))
+print("")
 # Model Accuracy: how often is the classifier correct?
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
