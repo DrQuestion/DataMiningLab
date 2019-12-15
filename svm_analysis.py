@@ -56,11 +56,11 @@ list_80 = [pd.read_csv('~/GoogleDrive/DataMiningLab/Nessra/160680_Hs.expansion',
 tcode_mat = pd.read_csv('~/GoogleDrive/DataMiningLab/hgnc_filtered_anno.csv', sep = ",", header=0)
 
 # Set filter tresholds and max genes per set here!
-freq_treshold = 0.5
+freq_treshold = 0.3
 n_genes_per_file = 50
 tcode_symbol_dict = ng.tcodeSymbolDictGen(tcode_mat)
-set79 = ng.setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict)
-set80 = ng.setGen(list_80[0], list_80[1], freq_treshold, n_genes_per_file, tcode_symbol_dict)
+set79 = ng.setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
+set80 = ng.setGen(list_80[0], list_80[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
 list_of_sets = [set79, set80]
 
 print("Subsetting matrix with NESSRA output genes")
@@ -85,7 +85,8 @@ y_pred = clf_ns.predict(X_test)
 from sklearn import metrics
 
 print("")
-print("Evaluating test set")
+print("--- Evaluating test set ---")
+print("Test matrix shape: {} \n{} \netc. \nTest class vector: {} \n{}, etc.\n".format(X_test.shape, X_test.head(2), len(y_test), y_test[:20]))
 # Model Accuracy: how often is the classifier correct?
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
