@@ -24,7 +24,6 @@ for name in col_names:
     new_col_names.append(temp_split[0])
 matrix_t.columns = new_col_names
 print("Transpose matrix shape: {}".format(matrix_t.shape))
-print(matrix_t.head(2))
 print("")
 
 # class vector 
@@ -39,7 +38,7 @@ class_vector = class_vector[fil_for_class]
 print("Objective shape after filter for matrix samples: {}".format(class_vector.shape))
 
 # Final vector for classifying
-train = class_vector.iloc[:, -1].values
+train = class_vector["over2years"]
 print("Final vector for classiftibg is a {}, first elements: {}".format(type(train), train[:5]))
 print("")
 
@@ -57,12 +56,14 @@ tcode_mat = pd.read_csv('~/GoogleDrive/DataMiningLab/hgnc_filtered_anno.csv', se
 
 # Set filter tresholds and max genes per set here!
 freq_treshold = 0.3
-n_genes_per_file = 50
+n_genes_per_file = 40
 tcode_symbol_dict = ng.tcodeSymbolDictGen(tcode_mat)
-set79 = ng.setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
+set79 = ng.setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=True)
 set80 = ng.setGen(list_80[0], list_80[1], freq_treshold, n_genes_per_file, tcode_symbol_dict, useIntFile=False)
 list_of_sets = [set79, set80]
 
+print("Len of set file79: {}".format(len(set79)))
+print("Len of set file80: {}".format(len(set80)))
 print("Subsetting matrix with NESSRA output genes")
 ns_mat = model.select_table(matrix_t, list_of_sets)
 print("Transpose matrix filtered shape: {}".format(ns_mat.shape))
@@ -74,10 +75,9 @@ print("")
 from sklearn.model_selection import train_test_split
 
 # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(ns_mat, train, test_size=0.2,random_state=109) # 80% training and 20% test
+X_train, X_test, y_train, y_test = train_test_split(ns_mat, train, test_size=0.2,random_state=300) # 80% training and 20% test
 
 # train the model
-
 clf_ns = model.training(X_train, y_train)
 
 y_pred = clf_ns.predict(X_test)
