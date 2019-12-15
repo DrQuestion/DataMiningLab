@@ -17,7 +17,7 @@ def select_table(table, sets):
     union_set = set()
     for s in sets:
         union_set = union_set.union(s)
-    return table[list(union_set)]
+    return table.iloc[:, table.columns.isin(list(union_set))]
     
 
 

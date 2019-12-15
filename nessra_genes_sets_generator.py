@@ -9,7 +9,7 @@ def tcodeSymbolDictGen(tcode_mat):
     Takes tcode matrix and creates a dictionary of tcode to ENS
     '''
     tcode_symbol_dict = {}
-    print("I'm importing tcode-to-Symbol dictionary, this will take a minute")
+    print("I'm creating tcode-to-Symbol dictionary, this will take a minute")
     for i, row in tcode_mat.iterrows():
         tcode_symbol_dict[row[0].lower()] = row[10]
     print("Done, dictionary ready")
@@ -28,7 +28,7 @@ def tcodeToEns(t_gene, tcodeSymbol_dict):
 def setGen(exp_file, int_file, freq_tres, n_genes, tcode_symbol_dict):
     '''
     Takes as input expansion ordered list of genes, related interaction file, frequency treshold for filter, max number of genes per file
-    Returns a set of genes
+    Returns a set of genes ENS and list of genes SYMBOL
     '''
   
     symbol_genes = []
@@ -72,26 +72,11 @@ def setGen(exp_file, int_file, freq_tres, n_genes, tcode_symbol_dict):
         
     return gene_set
 
-##### Running functions #####
+
+    
+    
 
 
-if __name__ == '__main__':
-
-    list_79 = [pd.read_csv('~/GoogleDrive/DataMining/Nessra/160679_Hs.expansion', sep = ",", header=1),
-            pd.read_csv('~/GoogleDrive/DataMining/Nessra/160679_Hs.interactions', sep = ",", header=1)]
-    list_80 = [pd.read_csv('~/GoogleDrive/DataMining/Nessra/160680_Hs.expansion', sep = ",", header=1),
-            pd.read_csv('~/GoogleDrive/DataMining/Nessra/160680_Hs.interactions', sep = ",", header=1)]
-    tcode_mat = pd.read_csv('~/GoogleDrive/DataMining/hgnc_filtered_anno.csv', sep = ",", header=1)
-
-    # Set filter tresholds and max genes per set here!
-    freq_treshold = 0.3
-    n_genes_per_file = 40
-    tcode_symbol_dict = tcodeSymbolDictGen(tcode_mat)
-
-    set79 = setGen(list_79[0], list_79[1], freq_treshold, n_genes_per_file, tcode_symbol_dict)
-    set80 = setGen(list_80[0], list_80[1], freq_treshold, n_genes_per_file, tcode_symbol_dict)
-
-    list_of_sets = [set79, set80]
 
 
 
