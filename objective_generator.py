@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-clinical = pd.read_csv ("clinical.tsv", header=0, sep="\t")
+clinical = pd.read_csv("C:\Users\aless\Documents\UniTn\DataMiningLab", header=0, sep="\t")
 rows = []
 
 for i, row in clinical.iterrows():
@@ -12,16 +12,16 @@ for i, row in clinical.iterrows():
     if row[8] == "Dead" and row[9] != "--":
       rows.append(i)
     else:
-      if row[28] != "--" and int(row[28]) > 2*365: #calculated in days and not in years (days_to_last_followup)
+      if row[28] != "--" and int(row[28]) > 5*365: #calculated in days and not in years (days_to_last_followup)
         rows.append(i)
 
 clinical = clinical.iloc[rows]
 over2years = []
 for i, row in clinical.iterrows():
-  if row[8] == "Dead" and int(row[9]) <= 2*365:
+  if row[8] == "Dead" and int(row[9]) <= 5*365:
     over2years.append(0)
   else:
     over2years.append(1)
 
-objective = pd.DataFrame( list(zip(clinical.iloc[:,1], over2years)), columns=["barcode", "over2years"])
+objective = pd.DataFrame(list(zip(clinical.iloc[:,1], over2years)), columns=["barcode", "over5years"])
 objective.to_csv("objective.tsv", sep="\t")
