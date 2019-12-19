@@ -4,17 +4,16 @@ import sklearn
 from sklearn.svm import SVC
 from sklearn.model_selection import KFold, GridSearchCV
 
+
 def select_genes(corex_mis_path, cluser_id, num_of_gene):
     """
         Select genes that have highest value from corex_mis matrix
     """
-    with open(corex_mis_path) as f:
-        matrix = pandas.read_csv(f, sep='\t')
-        gene_names = matrix.columns[1:]
-        values = list(matrix.iloc[cluser_id, :])[1:]
-        sorted_ = sorted(zip(gene_names, values), key = lambda x: x[1], reverse=True)
-    return [x[0] for x in sorted_[:num_of_gene]]
-
+    matrix = pandas.read_csv(corex_mis_path, sep='\t')
+    gene_names = matrix.columns[1:]
+    values = list(matrix.iloc[cluser_id, :])[1:]
+    sorted_ = sorted(zip(gene_names, values), key=lambda x: x[1], reverse=True)
+    return [x[0] for x in sorted_[:num_of_gene] if x[1] > 0]
 
 def select_table(table, sets):
     """ Select a subset of table with certain genes

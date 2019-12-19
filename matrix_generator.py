@@ -4,7 +4,7 @@ import pandas as pd
 expression_data_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/gdc_download_20191010_140437.280422"
 sample_sheet_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/gdc_sample_sheet.2019-10-11.tsv"
 matrix_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/expressionMatrix.tsv"
-FINAL_NUMBER_OF_FEATURES = 7000
+FINAL_NUMBER_OF_FEATURES = 5000
 INDIVUMED_TSS = ['AA', 'AG']
 NO_METADATA = ['TCGA-5M-AATA', 'TCGA-5M-AAT5', 'TCGA-F5-6810']
 
@@ -160,6 +160,16 @@ if __name__ == '__main__':
     print(len(filter_samples))
     matrix = matrix_generator(barcodes_filter=filter_samples)
     print(matrix.shape)
+    coding_filter = pd.read_csv(r"C:\Users\aless\Documents\UniTn\DataMiningLab\protein_coding_genes.v22.annotation.txt",
+                                sep=" ", header=None)
+    cd_genes = list(coding_filter.iloc[:, 3])
+    cod_genes = []
+    for name in cd_genes:
+        temp_split = name.split(".")
+        cod_genes.append(temp_split[0])
+    matrix = matrix[matrix.index.isin(cd_genes)]
+    print(matrix.shape)
+
     #matrix = matrix_trim(matrix, zero_ratio=0.9)
     #matrix = matrix_normalization(matrix, 'log')
     #print(matrix.iloc[1, :])

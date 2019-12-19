@@ -8,8 +8,8 @@ N_FEATURES = mg.FINAL_NUMBER_OF_FEATURES
 
 N_HIDDEN = 200
 REPS = 3
-N_CPU = 20
-RAM = 30
+N_CPU = 5
+RAM = 20
 
 max_edges = 100
 
