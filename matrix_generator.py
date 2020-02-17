@@ -160,7 +160,7 @@ def filter_by_variance(matrix, final_number_of_features=FINAL_NUMBER_OF_FEATURES
     
     print("len variances sorted: {}".format(len(variance_index_5k)))
     
-    f=open("first5kvariance.txt", "w+")
+    f=open("/home/riccardo/Documents/first5kvariance.txt", "w+")
     for i in variance_index_5k:
         gene_name = matrix.index.values[i]
         f.write(gene_name)
