@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 
-clinical = pd.read_csv(r"C:\Users\aless\Documents\UniTn\DataMiningLab\clinical.tsv", header=0, sep="\t")
+#clinical = pd.read_csv(r"C:\Users\aless\Documents\UniTn\DataMiningLab\clinical.tsv", header=0, sep="\t")
+clinical = pd.read_csv("~/Documents/clinical.tsv", header=0, sep="\t")
 rows = []
 
 for i, row in clinical.iterrows():
@@ -24,4 +25,6 @@ for i, row in clinical.iterrows():
     over5years.append(1)
 
 objective = pd.DataFrame(list(zip(clinical.iloc[:,1], over5years)), columns=["barcode", "over5years"])
-objective.to_csv(r"C:\Users\aless\Documents\UniTn\DataMiningLab\objective.tsv", sep="\t")
+#objective.to_csv(r"C:\Users\aless\Documents\UniTn\DataMiningLab\objective.tsv", sep="\t")
+objective.to_csv("~/Documents/objective.tsv", sep="\t")
+
