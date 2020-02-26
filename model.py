@@ -15,6 +15,16 @@ def select_genes(corex_mis_path, cluser_id, num_of_gene):
     sorted_ = sorted(zip(gene_names, values), key=lambda x: x[1], reverse=True)
     return [x[0] for x in sorted_[:num_of_gene] if x[1] > 0]
 
+
+def select_genes_(corex_mis, cluser_id, num_of_gene):
+    """
+        Select genes that have highest value from corex_mis matrix
+    """
+    gene_names = corex_mis.columns[1:]
+    values = list(corex_mis.iloc[cluser_id, :])[1:]
+    sorted_ = sorted(zip(gene_names, values), key=lambda x: x[1], reverse=True)
+    return [x[0] for x in sorted_[:num_of_gene] if x[1] > 0]
+
 def select_table(table, sets):
     """ Select a subset of table with certain genes
     Args:

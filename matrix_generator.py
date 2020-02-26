@@ -1,12 +1,13 @@
 import os
 import numpy as np
 import pandas as pd
-#expression_data_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/gdc_download_20191010_140437.280422"
-#sample_sheet_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/gdc_sample_sheet.2019-10-11.tsv"
-#matrix_path = r"C:/Users/aless/Documents/UniTn/DataMiningLab/expressionMatrix.tsv"
-expression_data_path = "/home/riccardo/Documents/gdc_download_20191010_140437.280422"
-sample_sheet_path = "~/Documents/gdc_sample_sheet.2019-10-10.tsv"
-matrix_path = "~/Documents/expressionMatrix.tsv"
+
+expression_data_path = r"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/gdc_download_20191010_140437.280422"
+sample_sheet_path = r"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/gdc_sample_sheet.2019-10-11.tsv"
+matrix_path = r"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/expressionMatrix.tsv"
+#expression_data_path = "/home/riccardo/Documents/gdc_download_20191010_140437.280422"
+#sample_sheet_path = "~/Documents/gdc_sample_sheet.2019-10-10.tsv"
+#matrix_path = "~/Documents/expressionMatrix.tsv"
 FINAL_NUMBER_OF_FEATURES = 5000
 INDIVUMED_TSS = ['AA', 'AG']
 NO_METADATA = ['TCGA-5M-AATA', 'TCGA-5M-AAT5', 'TCGA-F5-6810']
@@ -64,8 +65,8 @@ def matrix_generator(expression_matrix_path=expression_data_path, sample_sheet_p
                         continue
     matrix = matrix.set_index('Gene_ID')
     if save_matrix:
-        #matrix.to_csv(r"C:/Users/aless/Documents/UniTn/DataMiningLab/expressionMatrix.tsv", sep='\t')
-        matrix.to_csv("~/Documents/expressionMatrix.tsv", sep='\t')
+        matrix.to_csv(r"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/expressionMatrix.tsv", sep='\t')
+        #matrix.to_csv("~/Documents/expressionMatrix.tsv", sep='\t')
     return matrix
 
 
@@ -153,29 +154,33 @@ def filter_by_variance(matrix, final_number_of_features=FINAL_NUMBER_OF_FEATURES
     for i, row in matrix.iterrows():
         if row.var() <= threshold_var:
             minor_variance.append(i)
-    
 
-    sorted(variances, reverse=True)
-    variance_index_5k = sorted(range(len(variances)), reverse=True, key=lambda x: variances[x])[:5000]
-    
-    print("len variances sorted: {}".format(len(variance_index_5k)))
-    
-    f=open("/home/riccardo/Documents/first5kvariance.txt", "w+")
-    for i in variance_index_5k:
-        gene_name = matrix.index.values[i]
-        f.write(gene_name)
-    f.close()
+    matrix['vars'] = variances
+    matrix = matrix.sort_values(by=['vars'], ascending=[False])
+    matrix = matrix.drop('vars', axis=1)
+    matrix = matrix.iloc[:5000]
 
-    matrix = matrix.drop(index=minor_variance)
-    #matrix.to_csv(rf"C:/Users/aless/Documents/UniTn/DataMiningLab/exprMatTop{final_number_of_features}ByVar.tsv", sep='\t')
-    matrix.to_csv("~/Documents/exprMatTop{final_number_of_features}ByVar.tsv", sep='\t')
-    print(matrix.shape)
-    return matrix
+    #sorted(variances, reverse=True)
+    #variance_index_5k = sorted(range(len(variances)), reverse=True, key=lambda x: variances[x])[:5000]
+    
+    #print("len variances sorted: {}".format(len(variance_index_5k)))
+    
+    #f=open("/home/riccardo/Documents/first5kvariance.txt", "w+")
+    #for i in variance_index_5k:
+    #    gene_name = matrix.index.values[i]
+    #    f.write(gene_name)
+    #f.close()
+
+    #matrix = matrix.drop(index=minor_variance)
+    matrix.to_csv(rf"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/exprMatTop{final_number_of_features}ByVar.tsv", sep='\t')
+    #matrix.to_csv("~/Documents/exprMatTop{final_number_of_features}ByVar.tsv", sep='\t')
+    #print(matrix.shape)
+    #return matrix
 
 
 if __name__ == '__main__':
-    #filter_samples = filter_generator(rf"C:/Users/aless/Documents/UniTn/DataMiningLab/objective.tsv")
-    filter_samples = filter_generator("~/Documents/objective.tsv")
+    filter_samples = filter_generator(rf"C:/Users/aless/Documents/UniTn/FirstSemester/BiologicalDataMiningLab/objective.tsv")
+    #filter_samples = filter_generator("~/Documents/objective.tsv")
     print(len(filter_samples))
     matrix = matrix_generator(barcodes_filter=filter_samples)
     print(matrix.shape)
@@ -199,5 +204,5 @@ if __name__ == '__main__':
     #print(matrix.iloc[1, :])
     #matrix.to_csv(r"C:/Users/aless/Desktop/expressionMatrix.csv")
     matrix = matrix_normalization(matrix, 'log')
-    matrix = filter_by_variance(matrix)
-    print(matrix.shape)
+    filter_by_variance(matrix)
+    #print(matrix.shape)
